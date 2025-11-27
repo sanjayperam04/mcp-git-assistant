@@ -1,44 +1,50 @@
-# Smart Git Commit Assistant
+# MCP Git Assistant
 
-An AI-powered tool that generates intelligent commit messages by analyzing your git changes using **Model Context Protocol (MCP)** and LLMs. Built with Next.js, TypeScript, and Tailwind CSS.
+A production-ready web application that leverages the Model Context Protocol (MCP) and Large Language Models to generate intelligent, conventional commit messages from git changes. Built with Next.js 14, TypeScript, and modern AI infrastructure.
 
-## What is MCP?
+## Overview
 
-This project uses the **Model Context Protocol (MCP)** - an open standard for connecting AI applications to external data sources and tools. Instead of directly executing git commands, we use the official `@modelcontextprotocol/server-git` MCP server to interact with git repositories in a standardized way.
+MCP Git Assistant demonstrates enterprise-grade integration of the Model Context Protocol for git operations. Rather than executing shell commands directly, the application communicates with the official `@modelcontextprotocol/server-git` MCP server, providing a standardized, secure, and maintainable approach to git automation.
 
-## Features
+This architecture showcases how MCP can bridge AI applications with external tools while maintaining separation of concerns and enabling seamless extensibility.
 
-- 🔌 **MCP Integration**: Uses official MCP Git server for all git operations
-- 🤖 AI-generated commit messages using OpenAI or Anthropic
-- 📊 Real-time git status visualization via MCP
-- ✅ Staged, unstaged, and untracked file tracking
-- ✏️ Edit generated messages before committing
-- 🎨 Clean, modern UI with Tailwind CSS
-- 🚀 Deploy to Vercel in minutes
+## Key Features
 
-## Tech Stack
+- **MCP Protocol Integration**: Implements Model Context Protocol for standardized git operations
+- **Multi-Provider LLM Support**: Compatible with Groq (Llama 3.3 70B), OpenAI (GPT-4), and Anthropic (Claude 3.5)
+- **Real-Time Repository Analysis**: Live git status monitoring through MCP tools
+- **Conventional Commits**: Generates commit messages following industry best practices
+- **Type-Safe Architecture**: Full TypeScript implementation with strict type checking
+- **Production-Ready**: Optimized for deployment on Vercel with edge runtime support
 
-- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
-- **AI**: OpenAI GPT-4 or Anthropic Claude
-- **MCP**: Model Context Protocol SDK + Git MCP Server
-- **Git Integration**: `@modelcontextprotocol/server-git` (official MCP server)
-- **Deployment**: Vercel-ready
+## Technology Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | Next.js 14 (App Router) |
+| **Language** | TypeScript 5.x |
+| **Styling** | Tailwind CSS 3.x |
+| **Protocol** | Model Context Protocol (MCP) SDK |
+| **MCP Server** | `@modelcontextprotocol/server-git` |
+| **LLM Providers** | Groq, OpenAI, Anthropic |
+| **Runtime** | Node.js 18+ |
+| **Deployment** | Vercel (Edge-optimized) |
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ installed
-- Git repository
-- `npx` available (comes with Node.js)
-- OpenAI API key OR Anthropic API key
+- Node.js 18.x or higher
+- npm or yarn package manager
+- Git 2.x or higher
+- API key from one of the supported LLM providers
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
-cd smart-git-commit-assistant
+git clone https://github.com/sanjayperam04/mcp-git-assistant.git
+cd mcp-git-assistant
 ```
 
 2. Install dependencies:
@@ -46,49 +52,58 @@ cd smart-git-commit-assistant
 npm install
 ```
 
-3. Create `.env` file:
+3. Configure environment variables:
 ```bash
 cp .env.example .env
 ```
 
-4. Add your API key to `.env`:
+4. Add your LLM provider API key to `.env`:
 ```env
-# Use one of these:
-OPENAI_API_KEY=sk-...
-# OR
-ANTHROPIC_API_KEY=sk-ant-...
+# Recommended: Groq (fastest, free tier available)
+GROQ_API_KEY=gsk_...
+
+# Alternative providers:
+# OPENAI_API_KEY=sk-proj-...
+# ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 ### Development
 
-Run the development server:
+Start the development server:
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+The application will be available at `http://localhost:3000`
 
-### Usage
+### Production Build
 
-1. **Stage your changes**: Use `git add` to stage files you want to commit
-2. **Open the app**: Navigate to the web interface
-3. **Generate message**: Click "Generate Commit Message" to create an AI-powered commit message
-4. **Review & edit**: Review the generated message and edit if needed
-5. **Commit**: Click "Commit Changes" to commit with the message
+```bash
+npm run build
+npm start
+```
 
-## Deploy to Vercel
+## Deployment
 
-1. Push your code to GitHub
-2. Go to [vercel.com](https://vercel.com)
-3. Import your repository
-4. Add environment variables (OPENAI_API_KEY or ANTHROPIC_API_KEY)
-5. Deploy!
+### Vercel (Recommended)
 
-Alternatively, use the Vercel CLI:
+1. Push your repository to GitHub
+2. Import project at [vercel.com/new](https://vercel.com/new)
+3. Configure environment variables:
+   - `GROQ_API_KEY` or `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`
+4. Deploy
+
+### Vercel CLI
+
 ```bash
 npm install -g vercel
+vercel login
 vercel
 ```
+
+### Other Platforms
+
+The application is compatible with any Node.js hosting platform that supports Next.js 14.
 
 ## Project Structure
 
@@ -112,35 +127,58 @@ vercel
 └── package.json
 ```
 
-## How It Works (MCP Architecture)
+## Architecture
 
-1. **MCP Client**: Next.js API routes create MCP client connections
-2. **Git MCP Server**: Spawns `@modelcontextprotocol/server-git` via `npx`
-3. **MCP Tools**: Calls MCP tools like `git_status`, `git_diff_unstaged`, `git_commit`
-4. **AI Generation**: Sends diff to OpenAI/Anthropic with specialized prompt
-5. **MCP Commit**: Executes commit through MCP server
+### MCP Integration Flow
 
-### MCP Flow Diagram
 ```
-User → Next.js API → MCP Client → Git MCP Server → Git Repository
-                         ↓
-                    OpenAI/Claude
-                         ↓
-                  Commit Message
+┌─────────────┐      ┌──────────────┐      ┌─────────────┐      ┌──────────────┐
+│   Browser   │─────▶│  Next.js API │─────▶│ MCP Client  │─────▶│  Git MCP     │
+│     UI      │      │    Routes    │      │             │      │   Server     │
+└─────────────┘      └──────────────┘      └─────────────┘      └──────────────┘
+                              │                                          │
+                              │                                          ▼
+                              │                                   ┌──────────────┐
+                              │                                   │     Git      │
+                              ▼                                   │  Repository  │
+                       ┌──────────────┐                          └──────────────┘
+                       │  LLM Provider│
+                       │ (Groq/OpenAI)│
+                       └──────────────┘
 ```
 
-## Commit Message Format
+### Request Lifecycle
 
-The AI follows conventional commits format:
+1. **Client Request**: User initiates action through web interface
+2. **API Route**: Next.js API route receives request
+3. **MCP Connection**: Establishes stdio transport to Git MCP server
+4. **Tool Invocation**: Calls MCP tools (`git_status`, `git_diff_unstaged`, `git_commit`)
+5. **LLM Processing**: Sends git diff to LLM for commit message generation
+6. **Response**: Returns structured data to client
+7. **Cleanup**: Closes MCP connection
+
+For detailed architecture documentation, see [MCP_ARCHITECTURE.md](./MCP_ARCHITECTURE.md)
+
+## Commit Message Standards
+
+Generated commit messages adhere to the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+
 ```
-type(scope): description
+<type>(<scope>): <description>
 
 [optional body]
 
 [optional footer]
 ```
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+**Supported Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, semicolons, etc.)
+- `refactor`: Code refactoring
+- `test`: Test additions or modifications
+- `chore`: Build process or auxiliary tool changes
 
 ## Troubleshooting
 
@@ -158,24 +196,41 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 - Make sure `npx` is available: `npx --version`
 - The Git MCP server is downloaded automatically on first use
 
-## Future Enhancements
+## Roadmap
 
-- [ ] PR description generation
-- [ ] Changelog automation
-- [ ] Commit quality scoring
+- [ ] Pull request description generation
+- [ ] Automated changelog generation
+- [ ] Commit quality metrics and scoring
 - [ ] Team analytics dashboard
 - [ ] VS Code extension
-- [ ] CLI tool
-- [ ] Multi-language support
+- [ ] CLI tool for terminal usage
+- [ ] Multi-language commit message support
+- [ ] Integration with additional MCP servers (filesystem, database)
 
 ## Contributing
 
-Contributions welcome! Please open an issue or PR.
+Contributions are welcome. Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/improvement`)
+3. Commit your changes following conventional commits
+4. Push to the branch (`git push origin feature/improvement`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
-## Author
+## Acknowledgments
 
-Built with ❤️ for developers who want better commit messages
+- [Model Context Protocol](https://modelcontextprotocol.io/) for the standardized AI-tool integration framework
+- [Anthropic](https://www.anthropic.com/) for MCP specification and reference implementations
+- [Vercel](https://vercel.com/) for Next.js framework and hosting platform
+
+## Contact
+
+For questions or feedback, please open an issue on GitHub.
+
+---
+
+**Built with Model Context Protocol** | [Documentation](./MCP_ARCHITECTURE.md) | [Setup Guide](./SETUP.md)
